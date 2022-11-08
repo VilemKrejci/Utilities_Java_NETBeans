@@ -345,7 +345,7 @@ public class TileBox extends Rectangle implements AWTEventListener {
      * @since 0.0.1
      */
     private void mouseClickedInside(MouseEvent e) {
-        //
+        // Pokud jsou povoleny vstupy
         if (!ignoreInputs) {
             // Pokud není krabička složena
             if (!resolved) {
@@ -397,7 +397,7 @@ public class TileBox extends Rectangle implements AWTEventListener {
             case KeyEvent.VK_LEFT:
             case KeyEvent.VK_A:
             case KeyEvent.VK_NUMPAD4:
-                //
+                // Pokud jsou povoleny vstupy
                 if (!ignoreInputs) {
                     // Pokus o posun prázdné pozice vpravo
                     if (processDirection(Direction.RIGHT)) {
@@ -411,7 +411,7 @@ public class TileBox extends Rectangle implements AWTEventListener {
             case KeyEvent.VK_UP:
             case KeyEvent.VK_W:
             case KeyEvent.VK_NUMPAD8:
-                //
+                // Pokud jsou povoleny vstupy
                 if (!ignoreInputs) {
                     // Pokus o posun prázdné pozice dolů
                     if (processDirection(Direction.DOWN)) {
@@ -425,7 +425,7 @@ public class TileBox extends Rectangle implements AWTEventListener {
             case KeyEvent.VK_RIGHT:
             case KeyEvent.VK_D:
             case KeyEvent.VK_NUMPAD6:
-                //
+                // Pokud jsou povoleny vstupy
                 if (!ignoreInputs) {
                     // Pokus o posun prázdné pozice vlevo
                     if (processDirection(Direction.LEFT)) {
@@ -439,7 +439,7 @@ public class TileBox extends Rectangle implements AWTEventListener {
             case KeyEvent.VK_DOWN:
             case KeyEvent.VK_S:
             case KeyEvent.VK_NUMPAD2:
-                //
+                // Pokud jsou povoleny vstupy
                 if (!ignoreInputs) {
                     // Pokus o posun prázdné pozice vzhůru
                     if (processDirection(Direction.UP)) {

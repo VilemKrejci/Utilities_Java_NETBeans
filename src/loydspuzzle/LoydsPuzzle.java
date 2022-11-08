@@ -31,6 +31,13 @@ import utilities.AnimatedCanvas;
 public class LoydsPuzzle extends Frame implements AWTEventListener {
 
     /**
+     * Obsahuje true, pokud je aplikace právě spouštěna
+     *
+     * @since 0.0.1
+     */
+    private static boolean fromMain;
+
+    /**
      * Metoda načte lokalizovaný text pro zadanou třídu
      *
      * @param objectClass reference na příslušnou třídu
@@ -88,6 +95,8 @@ public class LoydsPuzzle extends Frame implements AWTEventListener {
         //lp.setVisible(true);
         //
         //lp.pack();
+        //
+        LoydsPuzzle.fromMain = true;
         //
         lp.setLocationRelativeTo(null);
         lp.start(60f);
@@ -343,10 +352,19 @@ public class LoydsPuzzle extends Frame implements AWTEventListener {
                             // ukončíme aplikaci
                             LoydsPuzzle.this.dispose();
                         }
-                        //
+                        // Nápověda je zobrazena
                         else {
-                            //
+                            // tak ji skryjeme
                             helpFrame.setVisible(false);
+                            // a vstupy z klávesnice a myši nebudou ignorovány
+                            tileBox.setIgnoreInputs(false);                            
+                            // a pokud je aplikace právě spouštěna
+                            if (fromMain) {
+                                //
+                                fromMain = false;
+                                // Zamíchání krabičky kostek
+                                shuffle(getShuffleMoves());
+                            }
                         }
                         //
                         break;
@@ -381,22 +399,29 @@ public class LoydsPuzzle extends Frame implements AWTEventListener {
                         animatedCanvas.setDiagnostic(!animatedCanvas.isDiagnostic());
                         //
                         break;
-                    //
+                    // Pokud byla stisknuta klávesa pro nápovědu
                     case KeyEvent.VK_F1:
-                        //
+                        // a nápověda je zobrazena,
                         if (helpFrame.isVisible()) {
-                            //
+                            // pak bude skryta
                             helpFrame.setVisible(false);
-                            //
+                            // a vstupy z klávesnice a myši nebudou ignorovány
                             tileBox.setIgnoreInputs(false);
+                            // a pokud je aplikace právě spouštěna
+                            if (fromMain) {
+                                //
+                                fromMain = false;
+                                // Zamíchání krabičky kostek
+                                shuffle(getShuffleMoves());
+                            }
                         }
-                        //
+                        // Nápověda zobrazena není -
                         else {
-                            //
+                            // vstupy klávesnice a myši budou ignorovány
                             tileBox.setIgnoreInputs(true);
-                            //
+                            // a nápověda bude viditelná
                             helpFrame.setVisible(true);
-                            //
+                            // Vystředění nápovědného okna na klientskou plochu aplikace
                             helpFrame.setLocationRelativeTo(LoydsPuzzle.this);
                         }
                         //
@@ -416,10 +441,12 @@ public class LoydsPuzzle extends Frame implements AWTEventListener {
      */
     private void start(float fps) {
         //
+        helpFrame.setVisible(true);
+        //
         animatedCanvas.start(fps);
         //
-        tileBox.shuffle(getShuffleMoves());
-        // TODO: po spuštění zobrazit okno s nápovědou
+        //tileBox.shuffle(getShuffleMoves());
+        // 
     }
 
     /**
