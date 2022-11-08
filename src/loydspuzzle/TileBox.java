@@ -259,7 +259,6 @@ public class TileBox extends Rectangle implements AWTEventListener {
         Tile.setFont(new Font(Font.SERIF, Font.BOLD, fontSize));
         // Vlastní inicializace pole kostek
         initTiles(TileBox.INIT_ROWS, TileBox.INIT_COLS);
-        // TODO aktuaLIZACE POLOHY A VELIKOSTI PANELU MÍCHÁNÍ
         // Inicializace indikátoru průběhu míchání
         int left = getLeft() + 10;
         int width = getWidth() - 20;
