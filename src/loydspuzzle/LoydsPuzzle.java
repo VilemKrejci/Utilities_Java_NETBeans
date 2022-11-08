@@ -317,11 +317,12 @@ public class LoydsPuzzle extends Frame implements AWTEventListener {
                         LoydsPuzzle.this.dispose();
                         //
                         break;
-                    //
-                    case KeyEvent.VK_S:
-                        //
+                    // Pokud byla stisknuta klávesa M
+                    case KeyEvent.VK_M:
+                        // Vynulování ukazatelů
                         timeBox.reset();
-                        //
+                        movesBox.reset();
+                        // Zamíchání krabičky kostek
                         shuffle(7 * tileBox.getRows() * tileBox.getCols());
                         //
                         break;
@@ -339,7 +340,7 @@ public class LoydsPuzzle extends Frame implements AWTEventListener {
                         //
                         break;
                     //
-                    case KeyEvent.VK_D:
+                    case KeyEvent.VK_T:
                         //
                         animatedCanvas.setDiagnostic(!animatedCanvas.isDiagnostic());
                         //

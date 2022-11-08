@@ -104,7 +104,8 @@ public class TileBox extends Rectangle implements AWTEventListener {
     }
 
     /**
-     * Obsahuje referenci na generátor náhodných čísel
+     * Obsahuje referenci na generátor náhodných čísel. Jelikož je společná pro
+     * všechny instance třídy, nesmí být v instanci uvolněna !!!
      *
      * @since 0.0.1
      */
@@ -384,6 +385,8 @@ public class TileBox extends Rectangle implements AWTEventListener {
         switch (e.getKeyCode()) {
             // Byla stisknuta klávesa vlevo
             case KeyEvent.VK_LEFT:
+            case KeyEvent.VK_A:
+            case KeyEvent.VK_NUMPAD4:
                 // Pokus o posun prázdné pozice vpravo
                 if (processDirection(Direction.RIGHT)) {
                     // Pokud došlo k přesunu, událost byla obsloužena
@@ -393,6 +396,8 @@ public class TileBox extends Rectangle implements AWTEventListener {
                 break;
             // Byla stisknuta klávesa nahoru
             case KeyEvent.VK_UP:
+            case KeyEvent.VK_W:
+            case KeyEvent.VK_NUMPAD8:
                 // Pokus o posun prázdné pozice dolů
                 if (processDirection(Direction.DOWN)) {
                     // Pokud došlo k přesunu, událost byla obsloužena
@@ -402,6 +407,8 @@ public class TileBox extends Rectangle implements AWTEventListener {
                 break;
             // Byla stisknuta klávesa vpravo
             case KeyEvent.VK_RIGHT:
+            case KeyEvent.VK_D:
+            case KeyEvent.VK_NUMPAD6:
                 // Pokus o posun prázdné pozice vlevo
                 if (processDirection(Direction.LEFT)) {
                     // Pokud došlo k přesunu, událost byla obsloužena
@@ -411,6 +418,8 @@ public class TileBox extends Rectangle implements AWTEventListener {
                 break;
             // Byla stisknuta klávesa dolů
             case KeyEvent.VK_DOWN:
+            case KeyEvent.VK_S:
+            case KeyEvent.VK_NUMPAD2:
                 // Pokus o posun prázdné pozice vzhůru
                 if (processDirection(Direction.UP)) {
                     // Pokud došlo k přesunu, událost byla obsloužena
@@ -1043,34 +1052,26 @@ public class TileBox extends Rectangle implements AWTEventListener {
 
     @Override
     public void dispose() {
+        // Instance nadále nebude přijímat události
+        getDefaultToolkit().removeAWTEventListener(this);
         // Pokud míchací vlákno existuje a právě běží
         if (shufflingThread != null && shufflingThread.isAlive()) {
             // je třeba jej ukončit
             shufflingThread.interrupt();
         }
-        // Instance nadále nebude přijímat události
-        getDefaultToolkit().removeAWTEventListener(this);
-        // Pokud byla inicializována reference na generátor čísel
-        if (randomizer != null) {
-            // je třeba ji uvolnit
-            randomizer.dispose();
-        }
         //
-        try {
-            // Pro všechny klipy v poli
-            for (int i = 0; i < clickClips.length; i++) {
-                // Zastavení klipu
-                clickClips[i].stop();
-                //clickClips[i].close();
-                clickClips[i] = null;
-            }
-            // 
-            clickClips = null;
-            clickInputStream.close();
+        shufflingBox.dispose();
+        shufflingBox = null;
+        // je třeba ji uvolnit
+        //randomizer.dispose();
+        // Pro všechny klipy v poli
+        for (int i = 0; i < clickClips.length; i++) {
+            // Zastavení klipu
+            clickClips[i].stop();
+            //clickClips[i] = null;
         }
-        catch (IOException ex) {
-            //
-        }
+        // 
+        clickClips = null;
         // Uvolnění pole kostek
         disposeTiles();
         // Korektní uvolnění prostředků bázové třídy
