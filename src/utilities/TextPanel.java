@@ -7,6 +7,9 @@ package utilities;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.io.InputStream;
+import java.util.Locale;
+import java.util.Scanner;
 
 /**
  * Třída reprezentuje jednořádkový textový panel a implementuje metody pro práci
@@ -19,11 +22,47 @@ import java.awt.Graphics;
 public class TextPanel extends Rectangle {
 
     /**
+     * Metoda načte lokalizovaný text pro zadanou třídu
+     *
+     * @param objectClass reference na příslušnou třídu
+     *
+     * @return lokalizovaný text
+     *
+     * @since 0.0.1
+     */
+    private static String getLocalText(Class myClass) {
+        // Inicializace návratové hodnoty
+        StringBuilder retValue = new StringBuilder(":-((");
+        // Podle aktuálního jazyka vytvoří jméno souboru zdroje
+        StringBuilder fileName = new StringBuilder("" + myClass.getSimpleName() + "_");
+        fileName.append(Locale.getDefault().toString().equals("cs_CZ") ? "CZ" : "EN");
+        fileName.append(".txt");
+        // Pokus o otevření textového souboru
+        InputStream is = myClass.getResourceAsStream(fileName.toString());
+        // Pokud sobor s textem existuje
+        if (is != null) {
+            // 
+            Scanner scanner = new Scanner(is);
+            //
+            if (scanner.hasNext()) {
+                // 
+                retValue.delete(0, retValue.length());
+                retValue.append(scanner.next());
+                retValue.append(" ");
+            }
+            //
+            scanner.close();
+        }
+        //
+        return retValue.toString();
+    }
+
+    /**
      * Obsahuje referenci na objekt textu
      *
      * @since 0.0.1
      */
-    private Label label;
+    protected Label label;
 
     /**
      * Pracovní proměnné, aby nebylo nutno při každém renderování je znovu
@@ -62,6 +101,8 @@ public class TextPanel extends Rectangle {
         // Inicializace požadovaných barev
         setForeground(Color.BLACK);
         setBackground(Color.LIGHT_GRAY);
+        //
+        label.setText(TextPanel.getLocalText(getClass()));
     }
 
     /**

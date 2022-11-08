@@ -149,7 +149,7 @@ public class Bounds extends MyObject {
      * Metoda nastaví polohu objektu
      *
      * @param location požadovaná poloha objektu
-     * 
+     *
      * @since 0.0.1
      */
     public void setLocation(Location location) {
@@ -304,7 +304,7 @@ public class Bounds extends MyObject {
     }
 
     /**
-     * Metoda zjistí aktuální výšku objektu
+     * Metoda zjistí aktuální výšku objektu jako číslo typu Integer
      *
      * @return aktuální výška objektu
      *
@@ -313,6 +313,18 @@ public class Bounds extends MyObject {
     public int getHeight() {
         //
         return size.getHeight();
+    }
+
+    /**
+     * Metoda zjistí aktuální výšku objektu jako číslo typu Float
+     *
+     * @return aktuální výška objektu
+     *
+     * @since 0.0.1
+     */
+    public float getHeightF() {
+        //
+        return size.getHeightF();
     }
 
     @Override
