@@ -92,10 +92,8 @@ public class TimeBox extends TextPanel {
         // Inicializace požadovaných barev
         setForeground(Color.BLACK);
         setBackground(Color.LIGHT_GRAY);
-        // Pozadí textu nebude viditelné
-        super.setTextBackgroundVisible(false);
         // Inicializace výchozího textu
-        text = "Čas: ";
+        text = getText();
         // Reset časovače
         reset();
     }

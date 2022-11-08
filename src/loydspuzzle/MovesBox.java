@@ -60,7 +60,7 @@ public class MovesBox extends TextPanel {
         // Pozadí textu nebude viditelné
         super.setTextBackgroundVisible(false);
         //
-        text = "Tahů: ";
+        text = getText();
         //
         reset();
     }

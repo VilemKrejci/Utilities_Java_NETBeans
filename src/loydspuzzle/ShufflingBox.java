@@ -6,9 +6,8 @@ package loydspuzzle;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
-import utilities.Rectangle;
+import utilities.TextPanel;
 
 /**
  * Třída reprezentuje indikátor průběhu míchání a implementuje metody pro práci
@@ -18,14 +17,7 @@ import utilities.Rectangle;
  *
  * @version 0.0.1
  */
-class ShufflingBar extends Rectangle {
-
-    /**
-     * Obsahuje referenci na font výpisu textu v objektu
-     *
-     * @since 0.0.1
-     */
-    private Font font;
+class ShufflingBox extends TextPanel {
 
     /**
      * Obsahuje aktuální hodnotu indikátoru
@@ -56,13 +48,6 @@ class ShufflingBar extends Rectangle {
     private float barWidth;
 
     /**
-     * Obsahuje referenci na text, zobrazovaný v indikátoru
-     *
-     * @since 0.0.1
-     */
-    private final String text = "Mícháme ...";
-
-    /**
      * Obsahuje aktuální barvu textu
      *
      * @since 0.0.1
@@ -90,8 +75,7 @@ class ShufflingBar extends Rectangle {
      *
      * @since 0.0.1
      */
-    private FontMetrics fontMetrics;
-
+    //private FontMetrics fontMetrics;
     /**
      * Veřejný parametrický konstruktor vytvoří a inicializuje novou instanci
      *
@@ -102,11 +86,22 @@ class ShufflingBar extends Rectangle {
      *
      * @since 0.0.1
      */
-    public ShufflingBar(float left, float top, float width, float height) {
+    public ShufflingBox(float left, float top, float width, float height) {
         // Korektní inicializace bázové třídy
         super(left, top, width, height);
         // Další inicializace, které NetBeans nesnesou v konstruktoru
         init();
+    }
+
+    @Override
+    public void setBounds(float left, float top, float width, float height) {
+        //
+        if (width != getWidthF() || height != getHeightF()) {
+            //
+            super.setBounds(left, top, width, height);
+            //
+            setFont(new Font(Font.SERIF, Font.BOLD + Font.ITALIC, (int) ((2 * height) / 3)));
+        }
     }
 
     /**
@@ -121,15 +116,13 @@ class ShufflingBar extends Rectangle {
         setBackground(new Color(90, 90, 90, 220));
         setForeground(Color.BLACK);
         // Inicializace přírůstku barevných složek
-        colorIncrement = -1;
+        colorIncrement = -2;
         // Inicializace barvy textu
         textColor = new Color(155, 9, 14);
-        // a jednotlivých jejích složek
-        red = textColor.getRed();
-        green = textColor.getGreen();
-        blue = textColor.getBlue();
         // Inicializace reference na font pro výpis
-        font = new Font(Font.SERIF, Font.ITALIC + Font.BOLD, (2 * getHeight()) / 3);
+        setFont(new Font(Font.SERIF, Font.ITALIC + Font.BOLD, (1 * getHeight()) / 3));
+        //
+        setText(getText() + "...");
         // Reset indikátoru
         reset();
     }
@@ -158,6 +151,10 @@ class ShufflingBar extends Rectangle {
         barWidth = 0;
         //
         value = 0;
+        // a jednotlivých jejích složek
+        red = textColor.getRed();
+        green = textColor.getGreen();
+        blue = textColor.getBlue();
         //
         increment = getWidthF() / maximum;
     }
@@ -179,16 +176,6 @@ class ShufflingBar extends Rectangle {
         }
     }
 
-    @Override
-    public void setVisible(boolean visible) {
-        // Inicializace jednotlivých barevných složek
-        red = textColor.getRed();
-        green = textColor.getGreen();
-        blue = textColor.getBlue();
-        // 
-        super.setVisible(visible);
-    }
-
     /**
      * Metoda aktualizuje stav objektu po uplynulém časovém intervalu.
      *
@@ -208,9 +195,9 @@ class ShufflingBar extends Rectangle {
                 // Změna znaménka přírůstku
                 colorIncrement = -colorIncrement;
                 // Inicializace jednotlivých barevných složek
-                red = textColor.getRed();
-                green = textColor.getGreen();
-                blue = textColor.getBlue();
+                red += colorIncrement;
+                green += colorIncrement;
+                blue += colorIncrement;
             }
             // Pokud barvy podtekly
             else if (red < 0 || green < 0 || blue < 0) {
@@ -222,7 +209,7 @@ class ShufflingBar extends Rectangle {
                 blue += colorIncrement;
             }
             // Konstrukce barvy vypisovaného textu
-            textColor = new Color(red, green, blue);
+            label.setForeground(new Color(red, green, blue));
         }
     }
 
@@ -234,26 +221,9 @@ class ShufflingBar extends Rectangle {
     }
 
     @Override
-    protected void renderForeground(Graphics g) {
-        // Korektní vykreslení bázové třídy
-        super.renderForeground(g);
-        // Nastavení parametrů výpisu
-        g.setColor(textColor);
-        g.setFont(font);
-        // Výpočet polohy textu v indikátoru
-        fontMetrics = g.getFontMetrics();
-        int left = getLeft() + (getWidth() - fontMetrics.stringWidth(text)) / 2;
-        int top = getTop() + (getHeight() + fontMetrics.getAscent() - fontMetrics.getDescent() - fontMetrics.getLeading()) / 2;
-        // Vlastní výpis textu
-        g.drawString(text, left, top);
-    }
-
-    @Override
     public void dispose() {
         //
-        font = null;
-        //
-        fontMetrics = null;
+        textColor = null;
         // Korektní uvolnění prostředků bázové třídy
         super.dispose();
     }

@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package loydspuzzle;
- 
+
 import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -15,6 +15,9 @@ import static java.awt.Toolkit.getDefaultToolkit;
 import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
+import java.io.InputStream;
+import java.util.Locale;
+import java.util.Scanner;
 import utilities.AnimatedCanvas;
 
 /**
@@ -124,6 +127,23 @@ public class LoydsPuzzle extends Frame implements AWTEventListener {
         setVisible(true);
         // Inicializace rozložení zobrazovaných prvků
         initLayout(400, 400);
+        //----------------------------------------------------------------------
+        // Podle aktuálního jazyka vytvoří jméno souboru
+//        StringBuffer fileName = new StringBuffer("Strings_");
+//        fileName.append(Locale.getDefault().toString().equals("cs_CZ") ? "CZ" : "EN");
+//        fileName.append(".txt");
+//        InputStream is = getClass().getResourceAsStream(fileName.toString());
+//        Scanner s = new Scanner(is);
+//        String str = s.next();
+//        String name = getClass().getSimpleName();
+//        if (name.equals(str)) {
+//            //
+//            System.out.println(Locale.getDefault());
+//            System.out.println(fileName);
+//            System.out.println(str);
+//        }
+//        //
+//        s.close();
     }
 
     /**

@@ -192,7 +192,7 @@ public class TileBox extends Rectangle implements AWTEventListener {
      *
      * @since 0.0.1
      */
-    private ShufflingBar shufflingBar;
+    private ShufflingBox shufflingBox;
 
     /**
      * Obsahuje referenci na vstupní proud dat zvuku kliknutí
@@ -259,14 +259,17 @@ public class TileBox extends Rectangle implements AWTEventListener {
         Tile.setFont(new Font(Font.SERIF, Font.BOLD, fontSize));
         // Vlastní inicializace pole kostek
         initTiles(TileBox.INIT_ROWS, TileBox.INIT_COLS);
-        // Inicializace indikátoru průběhu míchání
-        int left = getLeft() + 10;
-        int width = getWidth() - 20;
-        int height = getHeight() / 6;
-        int top = getTop() + (getHeight() - height) / 2;
-        shufflingBar = new ShufflingBar(left, top, width, height);
-        shufflingBar.setArcs(arcWidth, arcHeight);
-        shufflingBar.setVisible(false);
+//        // Inicializace indikátoru průběhu míchání
+//        int left = getLeft() + 10;
+//        int width = getWidth() - 20;
+//        int height = getHeight() / 6;
+//        int top = getTop() + (getHeight() - height) / 2;
+//        shufflingBox = new ShufflingBox(left, top, width, height);
+        shufflingBox = new ShufflingBox(0, 0, 0, 0);
+        shufflingBox.setArcs(arcWidth, arcHeight);
+        shufflingBox.setVisible(false);
+        // Font 
+        //shufflingBox.setFont(new Font(Font.SERIF, Font.BOLD + Font.ITALIC, (2 * shufflingBox.getHeight()) / 5));
         // Příjemcem událostí myši a klávesnice bude tato instance
         getDefaultToolkit().addAWTEventListener(this, AWTEvent.MOUSE_EVENT_MASK | AWTEvent.KEY_EVENT_MASK);
     }
@@ -837,7 +840,7 @@ public class TileBox extends Rectangle implements AWTEventListener {
             int width = getWidth() - 20;
             int height = getHeight() / 6;
             int top = getTop() + (getHeight() - height) / 2;
-            shufflingBar.setBounds(left, top, width, height);
+            shufflingBox.setBounds(left, top, width, height);
             // Inicializace reference na míchací vlákno
             shufflingThread = new Thread() {
 
@@ -849,8 +852,8 @@ public class TileBox extends Rectangle implements AWTEventListener {
                 @Override
                 public void run() {
                     // Inicializace indikátoru průběhu míchání
-                    shufflingBar.setMaximum(moves);
-                    shufflingBar.setVisible(true);
+                    shufflingBox.setMaximum(moves);
+                    shufflingBox.setVisible(true);
                     //
                     //System.out.println("Moves = " + moves);
                     //
@@ -885,7 +888,7 @@ public class TileBox extends Rectangle implements AWTEventListener {
                             } // opakuj, pokud nebylo možno kostku přesunout
                             while (!moveEmptyPosition(currentMove));
                             // Posun indikátoru průběhu míchání
-                            shufflingBar.increment();
+                            shufflingBox.increment();
                         }
                         // Po zamíchání je třeba otestovat, zda nemáme složeno
                         resolved = isResolved();
@@ -909,7 +912,7 @@ public class TileBox extends Rectangle implements AWTEventListener {
                     // Aktální rychlost přesunu
                     currentVelocity = TileBox.MOVING_VELOCITY;
                     //
-                    shufflingBar.setVisible(false);
+                    shufflingBox.setVisible(false);
                     //
                     shufflingFinished();
                 }
@@ -1012,7 +1015,7 @@ public class TileBox extends Rectangle implements AWTEventListener {
             }
         }
         // Aktualizace stavu indikátoru průběhu míchání
-        shufflingBar.updateStateAfter(millis);
+        shufflingBox.updateStateAfter(millis);
     }
 
     @Override
@@ -1028,7 +1031,7 @@ public class TileBox extends Rectangle implements AWTEventListener {
             }
         }
         // Vykreslení indikátoru průběhu míchání
-        shufflingBar.renderTo(g);
+        shufflingBox.renderTo(g);
     }
 
     @Override
