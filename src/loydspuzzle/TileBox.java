@@ -259,17 +259,10 @@ public class TileBox extends Rectangle implements AWTEventListener {
         Tile.setFont(new Font(Font.SERIF, Font.BOLD, fontSize));
         // Vlastní inicializace pole kostek
         initTiles(TileBox.INIT_ROWS, TileBox.INIT_COLS);
-//        // Inicializace indikátoru průběhu míchání
-//        int left = getLeft() + 10;
-//        int width = getWidth() - 20;
-//        int height = getHeight() / 6;
-//        int top = getTop() + (getHeight() - height) / 2;
-//        shufflingBox = new ShufflingBox(left, top, width, height);
+        // Inicializace indikátoru průběhu míchání
         shufflingBox = new ShufflingBox(0, 0, 0, 0);
         shufflingBox.setArcs(arcWidth, arcHeight);
         shufflingBox.setVisible(false);
-        // Font 
-        //shufflingBox.setFont(new Font(Font.SERIF, Font.BOLD + Font.ITALIC, (2 * shufflingBox.getHeight()) / 5));
         // Příjemcem událostí myši a klávesnice bude tato instance
         getDefaultToolkit().addAWTEventListener(this, AWTEvent.MOUSE_EVENT_MASK | AWTEvent.KEY_EVENT_MASK);
     }

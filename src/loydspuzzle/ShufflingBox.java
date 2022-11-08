@@ -120,7 +120,7 @@ class ShufflingBox extends TextPanel {
         // Inicializace barvy textu
         textColor = new Color(155, 9, 14);
         // Inicializace reference na font pro výpis
-        setFont(new Font(Font.SERIF, Font.ITALIC + Font.BOLD, (1 * getHeight()) / 3));
+        //setFont(new Font(Font.SERIF, Font.ITALIC + Font.BOLD, (1 * getHeight()) / 3));
         //
         setText(getText() + "...");
         // Reset indikátoru
