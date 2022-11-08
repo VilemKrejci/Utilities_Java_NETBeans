@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package loydspuzzle;
-
+ 
 import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.Dimension;
