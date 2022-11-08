@@ -31,6 +31,42 @@ import utilities.AnimatedCanvas;
 public class LoydsPuzzle extends Frame implements AWTEventListener {
 
     /**
+     * Metoda načte lokalizovaný text pro zadanou třídu
+     *
+     * @param objectClass reference na příslušnou třídu
+     *
+     * @return lokalizovaný text
+     *
+     * @since 0.0.1
+     */
+    private static String getLocalText(Class myClass) {
+        // Inicializace návratové hodnoty
+        StringBuilder retValue = new StringBuilder(":-((");
+        // Podle aktuálního jazyka vytvoří jméno souboru zdroje
+        StringBuilder fileName = new StringBuilder("" + myClass.getSimpleName() + "_");
+        fileName.append(Locale.getDefault().toString().equals("cs_CZ") ? "CZ" : "EN");
+        fileName.append(".txt");
+        // Pokus o otevření textového souboru
+        InputStream is = myClass.getResourceAsStream(fileName.toString());
+        // Pokud sobor s textem existuje
+        if (is != null) {
+            // 
+            Scanner scanner = new Scanner(is);
+            //
+            if (scanner.hasNext()) {
+                // 
+                retValue.delete(0, retValue.length());
+                retValue.append(scanner.nextLine());
+                retValue.append(" ");
+            }
+            //
+            scanner.close();
+        }
+        //
+        return retValue.toString();
+    }
+
+    /**
      * Metoda provede vlastní spuštění aplikace
      *
      * @param args argumenty příkazového řádku
@@ -92,6 +128,8 @@ public class LoydsPuzzle extends Frame implements AWTEventListener {
      */
     private MovesBox movesBox;
 
+    private Frame helpFrame;
+
     /**
      * Soukromý bezparametrický konstruktor vytvoří a inicializuje novou
      * instanci
@@ -111,6 +149,10 @@ public class LoydsPuzzle extends Frame implements AWTEventListener {
      * @since 0.0.1
      */
     private void init() {
+        //
+        helpFrame = new HelpFrame(this);
+        // Nastavení titulku okna
+        this.setTitle(getLocalText(getClass()));
         // Příjemcem zráv okna bude tato instance
         this.getToolkit().addAWTEventListener(this, AWTEvent.WINDOW_EVENT_MASK);
         // Okno bude ignorovat systémové požadavky na překreslení
@@ -127,23 +169,6 @@ public class LoydsPuzzle extends Frame implements AWTEventListener {
         setVisible(true);
         // Inicializace rozložení zobrazovaných prvků
         initLayout(400, 400);
-        //----------------------------------------------------------------------
-        // Podle aktuálního jazyka vytvoří jméno souboru
-//        StringBuffer fileName = new StringBuffer("Strings_");
-//        fileName.append(Locale.getDefault().toString().equals("cs_CZ") ? "CZ" : "EN");
-//        fileName.append(".txt");
-//        InputStream is = getClass().getResourceAsStream(fileName.toString());
-//        Scanner s = new Scanner(is);
-//        String str = s.next();
-//        String name = getClass().getSimpleName();
-//        if (name.equals(str)) {
-//            //
-//            System.out.println(Locale.getDefault());
-//            System.out.println(fileName);
-//            System.out.println(str);
-//        }
-//        //
-//        s.close();
     }
 
     /**
@@ -311,25 +336,36 @@ public class LoydsPuzzle extends Frame implements AWTEventListener {
             protected void processKeyEvent(KeyEvent e) {
                 // Na základě stisknuté klávesy
                 switch (e.getKeyCode()) {
-                    // Pokud je stisknuta klávesa Escape,
+                    // Pokud je stisknuta klávesa Escape
                     case KeyEvent.VK_ESCAPE:
-                        // ukončíme aplikaci
-                        LoydsPuzzle.this.dispose();
+                        // a není zobrazena nápověda,
+                        if (!helpFrame.isVisible()) {
+                            // ukončíme aplikaci
+                            LoydsPuzzle.this.dispose();
+                        }
+                        //
+                        else {
+                            //
+                            helpFrame.setVisible(false);
+                        }
                         //
                         break;
                     // Pokud byla stisknuta klávesa M
                     case KeyEvent.VK_M:
-                        // Vynulování ukazatelů
-                        timeBox.reset();
-                        movesBox.reset();
-                        // Zamíchání krabičky kostek
-                        shuffle(7 * tileBox.getRows() * tileBox.getCols());
+                        // a není zobrazena nápověda,
+                        if (!helpFrame.isVisible()) {
+                            // Vynulování ukazatelů
+                            timeBox.reset();
+                            movesBox.reset();
+                            // Zamíchání krabičky kostek
+                            shuffle(getShuffleMoves());
+                        }
                         //
                         break;
                     //
                     case KeyEvent.VK_I:
                         //
-                        if (!this.isShuffling()) {
+                        if (!this.isShuffling() && !helpFrame.isVisible()) {
                             //
                             initTiles(3, 3);
                             //
@@ -343,6 +379,26 @@ public class LoydsPuzzle extends Frame implements AWTEventListener {
                     case KeyEvent.VK_T:
                         //
                         animatedCanvas.setDiagnostic(!animatedCanvas.isDiagnostic());
+                        //
+                        break;
+                    //
+                    case KeyEvent.VK_F1:
+                        //
+                        if (helpFrame.isVisible()) {
+                            //
+                            helpFrame.setVisible(false);
+                            //
+                            tileBox.setIgnoreInputs(false);
+                        }
+                        //
+                        else {
+                            //
+                            tileBox.setIgnoreInputs(true);
+                            //
+                            helpFrame.setVisible(true);
+                            //
+                            helpFrame.setLocationRelativeTo(LoydsPuzzle.this);
+                        }
                         //
                         break;
                 }
@@ -362,7 +418,20 @@ public class LoydsPuzzle extends Frame implements AWTEventListener {
         //
         animatedCanvas.start(fps);
         //
-        //tileBox.shuffle(7 * tileBox.getRows() * tileBox.getCols());
+        tileBox.shuffle(getShuffleMoves());
+        // TODO: po spuštění zobrazit okno s nápovědou
+    }
+
+    /**
+     * Metoda spočte, kolik tahů je potřeba pro zamíchání krabičky
+     *
+     * @return počet tahů pro zamíchání krabičky
+     *
+     * @since 0.0.1
+     */
+    private int getShuffleMoves() {
+        //
+        return 7 * tileBox.getRows() * tileBox.getCols();
     }
 
     @Override
@@ -382,6 +451,8 @@ public class LoydsPuzzle extends Frame implements AWTEventListener {
         timeBox = null;
         movesBox.dispose();
         movesBox = null;
+        //
+        helpFrame.dispose();
         // Korektní uvolnění prostředků bázové třídy
         super.dispose();
     }

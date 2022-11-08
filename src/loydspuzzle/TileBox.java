@@ -210,6 +210,13 @@ public class TileBox extends Rectangle implements AWTEventListener {
     private Clip[] clickClips;
 
     /**
+     * True, pokud jsou aktuálě ignorovány vstupy klávesnice a myši
+     *
+     * @since 0.0.1
+     */
+    private boolean ignoreInputs;
+
+    /**
      * Veřejný parametrický konstruktor vytvoří a inicializuje novou instanci
      *
      * @param left výchozí levá souřadnice polohy objektu
@@ -338,38 +345,41 @@ public class TileBox extends Rectangle implements AWTEventListener {
      * @since 0.0.1
      */
     private void mouseClickedInside(MouseEvent e) {
-        // Pokud není krabička složena
-        if (!resolved) {
-            // a pokud se žádná kostka nepohybuje
-            if (tilesInMotion == 0) {
-                // Inicializace pro ev. chybovou hlášku
-                int row = -1;
-                int col = -1;
-                // Pro všechny řádky pole kostek
-                for (int r = 0; r < tiles.length; r++) {
-                    // Pro všechny sloupce aktuálního řádku pole kostek
-                    for (int c = 0; c < tiles[r].length; c++) {
-                        // Pokud bylo kliknuto na aktuální kostce
-                        if (tiles[r][c].contains(e.getX(), e.getY())) {
-                            //
-                            row = r;
-                            col = c;
+        //
+        if (!ignoreInputs) {
+            // Pokud není krabička složena
+            if (!resolved) {
+                // a pokud se žádná kostka nepohybuje
+                if (tilesInMotion == 0) {
+                    // Inicializace pro ev. chybovou hlášku
+                    int row = -1;
+                    int col = -1;
+                    // Pro všechny řádky pole kostek
+                    for (int r = 0; r < tiles.length; r++) {
+                        // Pro všechny sloupce aktuálního řádku pole kostek
+                        for (int c = 0; c < tiles[r].length; c++) {
+                            // Pokud bylo kliknuto na aktuální kostce
+                            if (tiles[r][c].contains(e.getX(), e.getY())) {
+                                //
+                                row = r;
+                                col = c;
+                            }
                         }
                     }
-                }
-                // Pokud nebylo kliknuto na prázdné pozici
-                if (tiles[row][col].isVisible()) {
-                    // pak přesun zvolené kostky na volnou pozici, pokud je to možné
-                    moveTileAtRowColToEmptyPosition(row, col);
-                    // Událost byla obsloužena
-                    e.consume();
+                    // Pokud nebylo kliknuto na prázdné pozici
+                    if (tiles[row][col].isVisible()) {
+                        // pak přesun zvolené kostky na volnou pozici, pokud je to možné
+                        moveTileAtRowColToEmptyPosition(row, col);
+                        // Událost byla obsloužena
+                        e.consume();
+                    }
                 }
             }
-        }
-        // Krabička už je složena !
-        else {
-            //
-            getDefaultToolkit().beep();
+            // Krabička už je složena !
+            else {
+                //
+                getDefaultToolkit().beep();
+            }
         }
     }
 
@@ -387,10 +397,13 @@ public class TileBox extends Rectangle implements AWTEventListener {
             case KeyEvent.VK_LEFT:
             case KeyEvent.VK_A:
             case KeyEvent.VK_NUMPAD4:
-                // Pokus o posun prázdné pozice vpravo
-                if (processDirection(Direction.RIGHT)) {
-                    // Pokud došlo k přesunu, událost byla obsloužena
-                    e.consume();
+                //
+                if (!ignoreInputs) {
+                    // Pokus o posun prázdné pozice vpravo
+                    if (processDirection(Direction.RIGHT)) {
+                        // Pokud došlo k přesunu, událost byla obsloužena
+                        e.consume();
+                    }
                 }
                 //
                 break;
@@ -398,10 +411,13 @@ public class TileBox extends Rectangle implements AWTEventListener {
             case KeyEvent.VK_UP:
             case KeyEvent.VK_W:
             case KeyEvent.VK_NUMPAD8:
-                // Pokus o posun prázdné pozice dolů
-                if (processDirection(Direction.DOWN)) {
-                    // Pokud došlo k přesunu, událost byla obsloužena
-                    e.consume();
+                //
+                if (!ignoreInputs) {
+                    // Pokus o posun prázdné pozice dolů
+                    if (processDirection(Direction.DOWN)) {
+                        // Pokud došlo k přesunu, událost byla obsloužena
+                        e.consume();
+                    }
                 }
                 //
                 break;
@@ -409,10 +425,13 @@ public class TileBox extends Rectangle implements AWTEventListener {
             case KeyEvent.VK_RIGHT:
             case KeyEvent.VK_D:
             case KeyEvent.VK_NUMPAD6:
-                // Pokus o posun prázdné pozice vlevo
-                if (processDirection(Direction.LEFT)) {
-                    // Pokud došlo k přesunu, událost byla obsloužena
-                    e.consume();
+                //
+                if (!ignoreInputs) {
+                    // Pokus o posun prázdné pozice vlevo
+                    if (processDirection(Direction.LEFT)) {
+                        // Pokud došlo k přesunu, událost byla obsloužena
+                        e.consume();
+                    }
                 }
                 //
                 break;
@@ -420,10 +439,13 @@ public class TileBox extends Rectangle implements AWTEventListener {
             case KeyEvent.VK_DOWN:
             case KeyEvent.VK_S:
             case KeyEvent.VK_NUMPAD2:
-                // Pokus o posun prázdné pozice vzhůru
-                if (processDirection(Direction.UP)) {
-                    // Pokud došlo k přesunu, událost byla obsloužena
-                    e.consume();
+                //
+                if (!ignoreInputs) {
+                    // Pokus o posun prázdné pozice vzhůru
+                    if (processDirection(Direction.UP)) {
+                        // Pokud došlo k přesunu, událost byla obsloužena
+                        e.consume();
+                    }
                 }
                 //
                 break;
@@ -995,6 +1017,18 @@ public class TileBox extends Rectangle implements AWTEventListener {
      * @since 0.0.1
      */
     protected void puzzleResolved() {
+    }
+
+    /**
+     * Metoda povolí / zakáže příjem vstupních událostí klávesnice a myši
+     *
+     * @param ignoreInputs true, pokud se má vstup z klávesnice a myši ignorovat
+     *
+     * @since 0.0.1
+     */
+    public void setIgnoreInputs(boolean ignoreInputs) {
+        //
+        this.ignoreInputs = ignoreInputs;
     }
 
     /**
