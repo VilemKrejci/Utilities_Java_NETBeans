@@ -4,4 +4,4 @@ Application is able to recognize local Czech environment. In this case  it uses 
 
 If is possible and available, application uses accelerated graphics and double buffering.
 
-By default, application uses aniumation frequency 60 frames per second.
+By default, application uses animation frequency 60 frames per second.
