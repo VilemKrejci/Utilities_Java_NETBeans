@@ -304,6 +304,18 @@ public class Bounds extends MyObject {
     }
 
     /**
+     * Metoda nastaví aktuální výšku objektu jako číslo typu Integer
+     *
+     * @param height aktuální výška objektu
+     *
+     * @since 0.0.1
+     */
+    public void setHeight(float height) {
+        //
+        size.setHeight(height);
+    }
+
+    /**
      * Metoda zjistí aktuální výšku objektu jako číslo typu Integer
      *
      * @return aktuální výška objektu
