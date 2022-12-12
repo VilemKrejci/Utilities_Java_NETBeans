@@ -1,7 +1,8 @@
 Help for the game Loyd's Fifteen:
 ---------------------------------
 
-The Esc key exits the application or hides this help if it is displayed
+The Esc key exits the application
+
 F1 key will show / hide this help
 
 Cursor keys, W, A, S, D keys and arrow keys on the numeric keypad will move the corresponding tile to empty position

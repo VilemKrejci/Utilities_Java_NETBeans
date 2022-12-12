@@ -214,7 +214,7 @@ public class TileBox extends Rectangle implements AWTEventListener {
      *
      * @since 0.0.1
      */
-    private boolean ignoreInputs;
+    //private boolean ignoreInputs;
 
     /**
      * Veřejný parametrický konstruktor vytvoří a inicializuje novou instanci
@@ -313,28 +313,31 @@ public class TileBox extends Rectangle implements AWTEventListener {
 
     @Override
     public void eventDispatched(AWTEvent event) {
-        // Na základě vzniklé události
-        switch (event.getID()) {
-            // Pokud došlo ke kliknutí myší
-            case MouseEvent.MOUSE_CLICKED:
-                //
-                MouseEvent me = (MouseEvent) event;
-                // uvnitř krabičky kostek,
-                if (contains(me.getX(), me.getY())) {
+        //
+        //if (ignoreInputs) {
+            // Na základě vzniklé události
+            switch (event.getID()) {
+                // Pokud došlo ke kliknutí myší
+                case MouseEvent.MOUSE_CLICKED:
+                    //
+                    MouseEvent me = (MouseEvent) event;
+                    // uvnitř krabičky kostek,
+                    if (contains(me.getX(), me.getY())) {
+                        // je třeba událost obsloužit
+                        mouseClickedInside(me);
+                    }
+                    //
+                    break;
+                // Pokud doško ke stisku klávesy
+                case KeyEvent.KEY_PRESSED:
+                    //
+                    KeyEvent ke = (KeyEvent) event;
                     // je třeba událost obsloužit
-                    mouseClickedInside(me);
-                }
-                //
-                break;
-            // Pokud doško ke stisku klávesy
-            case KeyEvent.KEY_PRESSED:
-                //
-                KeyEvent ke = (KeyEvent) event;
-                // je třeba událost obsloužit
-                keyPressed(ke);
-                //
-                break;
-        }
+                    keyPressed(ke);
+                    //
+                    break;
+            }
+        //}
     }
 
     /**
@@ -346,7 +349,7 @@ public class TileBox extends Rectangle implements AWTEventListener {
      */
     private void mouseClickedInside(MouseEvent e) {
         // Pokud jsou povoleny vstupy
-        if (!ignoreInputs) {
+        //if (!ignoreInputs) {
             // Pokud není krabička složena
             if (!resolved) {
                 // a pokud se žádná kostka nepohybuje
@@ -380,7 +383,7 @@ public class TileBox extends Rectangle implements AWTEventListener {
                 //
                 getDefaultToolkit().beep();
             }
-        }
+        //}
     }
 
     /**
@@ -398,13 +401,13 @@ public class TileBox extends Rectangle implements AWTEventListener {
             case KeyEvent.VK_A:
             case KeyEvent.VK_NUMPAD4:
                 // Pokud jsou povoleny vstupy
-                if (!ignoreInputs) {
+                //if (!ignoreInputs) {
                     // Pokus o posun prázdné pozice vpravo
                     if (processDirection(Direction.RIGHT)) {
                         // Pokud došlo k přesunu, událost byla obsloužena
                         e.consume();
                     }
-                }
+                //}
                 //
                 break;
             // Byla stisknuta klávesa nahoru
@@ -412,13 +415,13 @@ public class TileBox extends Rectangle implements AWTEventListener {
             case KeyEvent.VK_W:
             case KeyEvent.VK_NUMPAD8:
                 // Pokud jsou povoleny vstupy
-                if (!ignoreInputs) {
+                //if (!ignoreInputs) {
                     // Pokus o posun prázdné pozice dolů
                     if (processDirection(Direction.DOWN)) {
                         // Pokud došlo k přesunu, událost byla obsloužena
                         e.consume();
                     }
-                }
+                //}
                 //
                 break;
             // Byla stisknuta klávesa vpravo
@@ -426,13 +429,13 @@ public class TileBox extends Rectangle implements AWTEventListener {
             case KeyEvent.VK_D:
             case KeyEvent.VK_NUMPAD6:
                 // Pokud jsou povoleny vstupy
-                if (!ignoreInputs) {
+                //if (!ignoreInputs) {
                     // Pokus o posun prázdné pozice vlevo
                     if (processDirection(Direction.LEFT)) {
                         // Pokud došlo k přesunu, událost byla obsloužena
                         e.consume();
                     }
-                }
+                //}
                 //
                 break;
             // Byla stisknuta klávesa dolů
@@ -440,13 +443,13 @@ public class TileBox extends Rectangle implements AWTEventListener {
             case KeyEvent.VK_S:
             case KeyEvent.VK_NUMPAD2:
                 // Pokud jsou povoleny vstupy
-                if (!ignoreInputs) {
+                //if (!ignoreInputs) {
                     // Pokus o posun prázdné pozice vzhůru
                     if (processDirection(Direction.UP)) {
                         // Pokud došlo k přesunu, událost byla obsloužena
                         e.consume();
                     }
-                }
+                //}
                 //
                 break;
             // Pokud nebyla stisknutá klávesa obsloužena, 
@@ -1019,17 +1022,17 @@ public class TileBox extends Rectangle implements AWTEventListener {
     protected void puzzleResolved() {
     }
 
-    /**
-     * Metoda povolí / zakáže příjem vstupních událostí klávesnice a myši
-     *
-     * @param ignoreInputs true, pokud se má vstup z klávesnice a myši ignorovat
-     *
-     * @since 0.0.1
-     */
-    public void setIgnoreInputs(boolean ignoreInputs) {
-        //
-        this.ignoreInputs = ignoreInputs;
-    }
+//    /**
+//     * Metoda povolí / zakáže příjem vstupních událostí klávesnice a myši
+//     *
+//     * @param ignoreInputs true, pokud se má vstup z klávesnice a myši ignorovat
+//     *
+//     * @since 0.0.1
+//     */
+//    public void setIgnoreInputs(boolean ignoreInputs) {
+//        //
+//        this.ignoreInputs = ignoreInputs;
+//    }
 
     /**
      * Metoda aktualizuje stav objektu po uplynulém časovém intervalu.

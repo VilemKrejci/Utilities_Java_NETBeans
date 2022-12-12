@@ -1,7 +1,8 @@
 Nápověda ke hře Loydova patnáctka:
 ----------------------------------
 
-Klávesa Esc ukončí aplikaci nebo skryje nápovědu, pokud je zobrazena
+Klávesa Esc ukončí aplikaci 
+
 Klávesa F1 zobrazí/skryje nápovědu
 
 Kurzorové klávesy, klávesy W, A, S, D a klávesy se šipkami na numerické klávesnici přesunou odpovídající kostku na prázdnou pozici

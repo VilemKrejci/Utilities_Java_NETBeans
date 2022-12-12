@@ -35,7 +35,7 @@ public class LoydsPuzzle extends Frame implements AWTEventListener {
      *
      * @since 0.0.1
      */
-    private static boolean fromMain;
+    private static boolean justStarted;
 
     /**
      * Metoda načte lokalizovaný text pro zadanou třídu
@@ -96,7 +96,7 @@ public class LoydsPuzzle extends Frame implements AWTEventListener {
         //
         //lp.pack();
         //
-        LoydsPuzzle.fromMain = true;
+        //LoydsPuzzle.fromMain = true;
         //
         lp.setLocationRelativeTo(null);
         lp.start(60f);
@@ -137,7 +137,7 @@ public class LoydsPuzzle extends Frame implements AWTEventListener {
      */
     private MovesBox movesBox;
 
-    private Frame helpFrame;
+    private HelpFrame helpFrame;
 
     /**
      * Soukromý bezparametrický konstruktor vytvoří a inicializuje novou
@@ -148,6 +148,8 @@ public class LoydsPuzzle extends Frame implements AWTEventListener {
     private LoydsPuzzle() {
         // Korektní inicializace bázové třídy
         super();
+        // Aplikace je právě spouštěna
+        justStarted = true;
         // Pokračování inicializací
         init();
     }
@@ -255,6 +257,14 @@ public class LoydsPuzzle extends Frame implements AWTEventListener {
             // uvolníme její hlavní okno
             dispose();
         }
+        // Pokud bylo okno hry aktivováno
+        if (event.getID() == WindowEvent.WINDOW_ACTIVATED) {
+            // a není povoleno,
+            if (!isEnabled()) {
+                // bude aktivní okno nápovědy
+                helpFrame.requestFocus();
+            }
+        }
     }
 
     /**
@@ -352,20 +362,20 @@ public class LoydsPuzzle extends Frame implements AWTEventListener {
                             // ukončíme aplikaci
                             LoydsPuzzle.this.dispose();
                         }
-                        // Nápověda je zobrazena
-                        else {
-                            // tak ji skryjeme
-                            helpFrame.setVisible(false);
-                            // a vstupy z klávesnice a myši nebudou ignorovány
-                            tileBox.setIgnoreInputs(false);                            
-                            // a pokud je aplikace právě spouštěna
-                            if (fromMain) {
-                                //
-                                fromMain = false;
-                                // Zamíchání krabičky kostek
-                                shuffle(getShuffleMoves());
-                            }
-                        }
+//                        // Nápověda je zobrazena
+//                        else {
+//                            // tak ji skryjeme
+//                            helpFrame.setVisible(false);
+//                            // a vstupy z klávesnice a myši nebudou ignorovány
+//                            tileBox.setIgnoreInputs(false);                            
+//                            // a pokud je aplikace právě spouštěna
+//                            if (fromMain) {
+//                                //
+//                                fromMain = false;
+//                                // Zamíchání krabičky kostek
+//                                shuffle(getShuffleMoves());
+//                            }
+//                        }
                         //
                         break;
                     // Pokud byla stisknuta klávesa M
@@ -401,29 +411,33 @@ public class LoydsPuzzle extends Frame implements AWTEventListener {
                         break;
                     // Pokud byla stisknuta klávesa pro nápovědu
                     case KeyEvent.VK_F1:
-                        // a nápověda je zobrazena,
-                        if (helpFrame.isVisible()) {
-                            // pak bude skryta
-                            helpFrame.setVisible(false);
-                            // a vstupy z klávesnice a myši nebudou ignorovány
-                            tileBox.setIgnoreInputs(false);
-                            // a pokud je aplikace právě spouštěna
-                            if (fromMain) {
-                                //
-                                fromMain = false;
-                                // Zamíchání krabičky kostek
-                                shuffle(getShuffleMoves());
-                            }
-                        }
+//                        // a nápověda je zobrazena,
+//                        if (helpFrame.isVisible()) {
+//                            // pak bude skryta
+//                            helpFrame.setVisible(false);
+//                            // a vstupy z klávesnice a myši nebudou ignorovány
+//                            tileBox.setIgnoreInputs(false);
+//                            // a pokud je aplikace právě spouštěna
+//                            if (fromMain) {
+//                                //
+//                                fromMain = false;
+//                                // Zamíchání krabičky kostek
+//                                shuffle(getShuffleMoves());
+//                            }
+//                        }
                         // Nápověda zobrazena není -
-                        else {
-                            // vstupy klávesnice a myši budou ignorovány
-                            tileBox.setIgnoreInputs(true);
-                            // a nápověda bude viditelná
-                            helpFrame.setVisible(true);
-                            // Vystředění nápovědného okna na klientskou plochu aplikace
-                            helpFrame.setLocationRelativeTo(LoydsPuzzle.this);
-                        }
+//                        else {
+                        // vstupy klávesnice a myši budou ignorovány
+                        //tileBox.setIgnoreInputs(true);
+                        // a nápověda bude viditelná
+                        helpFrame.setVisible(true);
+                        // Vystředění nápovědného okna na klientskou plochu aplikace
+                        helpFrame.setLocationRelativeTo(LoydsPuzzle.this);
+                        //
+                        //helpFrame.requestFocus();
+                        //
+                        //LoydsPuzzle.this.setFocusable(false);// .setEnabled(false);
+//                        }
                         //
                         break;
                 }
@@ -440,13 +454,26 @@ public class LoydsPuzzle extends Frame implements AWTEventListener {
      * @since 0.0.1
      */
     private void start(float fps) {
-        //
-        helpFrame.setVisible(true);
-        //
+        // Spuštění animační smyčky okna
         animatedCanvas.start(fps);
+        // Pokud je aplikace právě spouštěna,
+        if (justStarted) {
+            // bude nejprve zobrazena nápověda
+            helpFrame.setVisible(true);
+        }
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
         //
-        //tileBox.shuffle(getShuffleMoves());
-        // 
+        super.setEnabled(enabled);
+        // Pokud je okno hry aktivováno a hra je právě spouštěna,
+        if (enabled && justStarted) {
+            // bude třeba ji poprvé zamíchat
+            tileBox.shuffle(getShuffleMoves());
+            // Nadále už se po skrytí nápovědy hra míchat nebude
+            justStarted = false;
+        }
     }
 
     /**
@@ -463,8 +490,6 @@ public class LoydsPuzzle extends Frame implements AWTEventListener {
 
     @Override
     public final synchronized void dispose() {
-        //
-        //setVisible(false);
         // Instance nadále nebude přijímat události
         getDefaultToolkit().removeAWTEventListener(this);
         // Korektní uvolnění alokovaných prostředků 

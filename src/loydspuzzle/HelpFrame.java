@@ -9,6 +9,10 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Insets;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -22,7 +26,7 @@ import javax.swing.JTextArea;
  *
  * @version 0.0.1
  */
-public class HelpFrame extends Frame {
+public class HelpFrame extends Frame implements MouseListener, KeyListener {
 
     /**
      * Reference na rodičovské okno
@@ -60,6 +64,9 @@ public class HelpFrame extends Frame {
      * @since 0.0.1
      */
     private void init() {
+        //
+        addMouseListener(this);
+        addKeyListener(this);
         // Nebudeme používat správce rozložení
         setLayout(null);
         // Nastavení výchozích barev
@@ -95,7 +102,7 @@ public class HelpFrame extends Frame {
         // Inicializace reference na font výpisu
         textArea.setFont(new Font(Font.MONOSPACED, Font.BOLD + Font.ITALIC, 17));
         textArea.setLocale(Locale.getDefault());
-        // Zalamování na koncích slov
+        // Zalamování na koncích slov a řádků
         textArea.setWrapStyleWord(true);
         textArea.setLineWrap(true);
         // Konstrukce názvu souboru nápovědy
@@ -126,13 +133,79 @@ public class HelpFrame extends Frame {
     }
 
     @Override
+    public void setVisible(boolean visible) {
+        //
+        super.setVisible(visible);
+        // Rodičovské okno bude zakázáno
+        parent.setEnabled(!visible);
+        // ale okno nápovědy bude povoleno 
+        setEnabled(visible);
+        // a bude přijímat události klávesnice a myši
+        requestFocus();
+    }
+
+    @Override
     public void dispose() {
+        // Okno už nebude přijímat události myši a klávesnice
+        removeMouseListener(this);
+        removeKeyListener(this);
         //
         remove(textArea);
-        //
         textArea = null;
-        //
+        // Korektní uvolnění bázové třídy
         super.dispose();
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        //
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        //
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        //
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        //
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        //
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        //
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        // Na základě stisknuté klávesy
+        switch (e.getKeyCode()) {
+            // Pokud byla stiknuta klávesa F1
+            case KeyEvent.VK_F1:
+                // Okno nápovědy nebude povoleno a nebude vidět
+                setEnabled(false);
+                setVisible(false);
+                // ale rodičovské okno povolewno bude
+                parent.setEnabled(true);
+                // a rovněž bude přijímat události myši a klávesnice
+                parent.requestFocus();
+
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        //
     }
 
 }
