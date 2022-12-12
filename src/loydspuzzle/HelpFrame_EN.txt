@@ -1,0 +1,15 @@
+Help for the game Loyd's Fifteen:
+---------------------------------
+
+The Esc key exits the application
+
+F1 key will show / hide this help
+
+Cursor keys, W, A, S, D keys and arrow keys on the numeric keypad will move the corresponding tile to empty position
+A mouse click will move the selected tile to empty position if possible
+
+The M key shuffles tiles in the box and resets the turn counter and timer
+
+The first successful move after shuffling will start the timer and it will not stop until the box is resolved
+
+		(c) Vilém KREJČÍ 2022 (vilem.krejci at gmail.com)
